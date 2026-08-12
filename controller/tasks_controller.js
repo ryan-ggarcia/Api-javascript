@@ -21,16 +21,36 @@ export default class TasksController{
             taks_array.push(new_task)
             res.status(201).json(taks_array)
         }else{
-            res.status(400).json("params not defined!")
+            res.status(400).json("Params not defined!")
         }
     }
 
     update(req,res){
-
+        const {id,name} = req.body
+        if(id != null && id != undefined){
+            let find_id = taks_array.find((task) => task.id == id)
+            if (find_id != undefined){
+                find_id.name = (name)
+                res.status(201).json(taks_array)
+            }else{
+                res.status(404).json("Error... resource not found")
+            }
+        }else{
+            res.status(400).json("Params not defined!")
+        }
     }
 
     delete(req,res){
-
+        const {id} = req.body
+        if ( id != null && id != undefined){
+            taks_array = taks_array.filter((task) => task.id != id)
+            if ( taks_array.find((task)=> task.id == id) == undefined )
+                res.status(201).json(taks_array)
+            else
+                res.status(500).json("Internal server error... ")
+        }else{
+            res.status(400).json("Params not defined")
+        }
     }
 
 }
