@@ -35,11 +35,14 @@ export default class PropertyRepository {
         imv_endereco = ?, imv_bairro = ? imv_cidade = ?, imv_valor = ?, imv_disponivel
         where imv_id = ?`
         const value = [data.id]
-        const result = await this.#database.ExecutaComandoNonQuery(query,value)
-        return result ? result : null
+        let result = await this.#database.ExecutaComandoNonQuery(query,value)
+        return result ? true : false
     }
 
-    delete(data) {
-        const query = `delete from tb_imovel `
+    async delete(data) {
+        const query = `delete from tb_imovel where imv_id =?`
+        const value = [data.id]
+        let result = await this.#database.ExecutaComandoNonQuery(query,value) 
+        return result ? true : false
     }
 }
