@@ -1,0 +1,52 @@
+2.create or replace procedure total_venda(
+    v_pro_cod in mat_produtos.pro_cod%type,
+    dt_ini in date,
+    dt_fim in date,
+    p_valor out number
+)
+is
+begin
+    select sum(v.ven_total) into p_valor
+    from mat_vendas v
+    inner join mat_itensvendas iv on iv.ven_cod = v.ven_cod
+    where iv.pro_cod = v_pro_cod and
+    v.ven_data >= dt_ini and
+    v.ven_data < dt_fim;
+end;
+    
+4.create or replace function f_desconto(
+    v_pes_cod in mat_pessoa.pes_cod%type)
+    return number
+is
+    v_desconto number;
+    v_nota number;
+begin
+    select c.est_uf, v.ven_nota into v_nota
+    from mat_cidades c
+    inner join mat_pessoa p on p.cid_cod = c.cid_cod
+    inner join mat_vendas v on v.pes_cod_cli = p.pes_cod
+    where p.pes_cod = v_pes_cod and
+    c.est_uf = 'AC';
+        v_desconto := case
+        when v_nota > 0 and add_months(sysdate,'MM') then 10
+        else 3
+    end;
+    return v_desconto;
+end;
+
+ 
+5.create or replace procedure update_limite is
+begin
+    update mat_pessoa p set p.pes_limite =(
+        select avg(v.ven_total)
+        from mat_vendas v
+        where v.cli_cod = p.pes_cod
+        and v.ven_data >= add_months(sysdate, -6)
+    )
+    where exists(
+        select 1
+        from mat_vendas v
+        where v.cli_cod = p.pes_cod
+        and v.ven_data >= add_months(sysdate,-6)
+    );
+end;
