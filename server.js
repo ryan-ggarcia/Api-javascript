@@ -1,14 +1,20 @@
 import express from 'express'
+import PropertyRouter from './router/propertyRouter.js'
+
 import swaggerUi from  'swagger-ui-express'
+
 import {createRequire} from 'module'
-import ProperyRouter from './router/propertyRouter.js'
+const require = createRequire(import.meta.url);
+const outputJson = require("./swagger_output.json");
+
 const app = express()
 
 const port = 5000
 
 app.use(express.json())
 
-app.use('/property', ProperyRouter)
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(outputJson));
+app.use('/property', PropertyRouter)
 
 app.listen(port, ()=>{
     console.log(`Server on-line in port: ${port}`)

@@ -18,16 +18,9 @@ export default class PropertyRepository {
 
     async read() {
         const rows = await this.#database.ExecutaComando(`select * from tb_imovel`)
-        return rows.map(r => new PropertyEntity(
-            r.imv_id,
-            r.imv_descricao,
-            r.imv_cep,
-            r.imv_endereco,
-            r.imv_bairro,
-            r.imv_cidade,
-            r.imv_valor,
-            r.imv_disponivel
-        ))
+        let properties = []
+        rows.map((row) => { properties.push(PropertyEntity.Map(row))})
+        return properties.length > 0 ? properties : false 
     }
 
     async update(data) {
