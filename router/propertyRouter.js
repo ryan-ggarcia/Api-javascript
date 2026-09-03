@@ -1,5 +1,5 @@
 import express from 'express'
-import PropertyControl from '../control/propertyControl.js'
+import PropertyControl from '../controller/propertyControl.js'
 
 const router = express.Router()
 let controller = new PropertyControl()
