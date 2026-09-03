@@ -1,10 +1,13 @@
 import express from 'express'
-import UserRepository from '../repositories/userRepository'
+import LoginController from '../controller/loginController.js'
 
 const router = express.Router()
 
-let controller = new UserRepository()
+let controller = new LoginController()
 
-router.post('/', controller.ValidateEmail)
+router.post("/", (req, res) => {
+
+    controller.Validate(req, res);
+})
 
 export default router

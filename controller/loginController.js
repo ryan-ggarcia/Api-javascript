@@ -1,6 +1,5 @@
-import UserEntity from "../entities/userEntities"
-import AuthMiddleware from "../middleware/autheMiddleware"
-import UserRepository from "../repositories/userRepository"
+import AuthMiddleware from "../middleware/autheMiddleware.js"
+import UserRepository from "../repositories/userRepository.js"
 
 export default class LoginController{
     #repository

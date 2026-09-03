@@ -1,5 +1,5 @@
-import Database from "../db/db"
-import UserEntity from "../entities/userEntities"
+import Database from "../db/db.js"
+import UserEntity from "../entities/userEntities.js"
 
 export default class UserRepository{
     #db
@@ -7,10 +7,10 @@ export default class UserRepository{
     constructor(){ this.#db = new Database() }
 
     async ValidateEmail(email, password){
-        const query = "SELECT * FROM tb_usuario WHERE usu_email = ? usu_senha = ?"
+        const query = "SELECT * FROM tb_usuario WHERE usu_email = ? AND usu_senha = ?"
         let values = [email,password]
-        let result = await this.#db.ExecutaComando(query,values)
-        
+        let row = await this.#db.ExecutaComando(query,values)
+        return row ? UserEntity.Map(row[0]) : false
     }
     async Create(entity){
         const query = "INSERT INTO tb_usuario (usu_nome,usu_email,usu_ativo,usu_senha,per_id)"
